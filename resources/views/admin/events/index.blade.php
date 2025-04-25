@@ -7,7 +7,7 @@
         <!-- Page header -->
         <div class="page-header d-flex justify-content-between align-items-center">
             <h1 class="page-title">Events List</h1>
-            <a href="#" class="btn btn-primary">
+            <a href="{{ route('events.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add New Event
             </a>
         </div>
@@ -16,14 +16,14 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table ">
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Title</th>
                                 <th>Date</th>
                                 <th>Location</th>
-                                <th>Status</th>
+                                <th>Type</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -31,12 +31,12 @@
                             @forelse($events as $event)
                                 <tr>
                                     <td>{{ $event['id'] }}</td>
-                                    <td>{{ $event['title'] }}</td>
+                                    <td>{{ $event['name'] }}</td>
                                     <td>{{ $event['date'] }}</td>
                                     <td>{{ $event['location'] }}</td>
                                     <td>
-                                        <span class="badge badge-{{ $event['status'] == 1 ? 'success' : 'danger' }}">
-                                            {{ $event['status'] === 1 ? 'Active' : 'Inactive' }}
+                                        <span class="badge bg-{{ $event['type'] == 'free' ? 'success' : 'warning' }}">
+                                            {{ $event['type'] === 'free' ? 'Free' : 'Paid' }}
                                         </span>
                                     </td>
                                     <td>

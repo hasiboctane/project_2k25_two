@@ -21,42 +21,47 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item"> <a href="#" class="nav-link active"> <i
                                     class="nav-icon bi bi-circle"></i>
-                                <p>Link1</p>
-                            </a> </li>
-                        <li class="nav-item"> <a href="#" class="nav-link active"> <i
-                                    class="nav-icon bi bi-circle"></i>
-                                <p>Link2</p>
-                            </a> </li>
-                        <li class="nav-item"> <a href="#" class="nav-link active"> <i
-                                    class="nav-icon bi bi-circle"></i>
                                 <p>Link3</p>
                             </a> </li>
 
                     </ul>
                 </li>
-                <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-palette"></i>
-                        <p>Link</p>
-                    </a> </li>
+
                 <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-box-seam-fill"></i>
                         <p>
-                            Links
+                            Category
                             <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                <p>Link1</p>
+                                <p>add new</p>
                             </a> </li>
                         <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                <p>Link2</p>
+                                <p>list</p>
                             </a> </li>
-                        <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
-                                <p>Link3</p>
-                            </a> </li>
-
                     </ul>
                 </li>
-
+                <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-box-seam-fill"></i>
+                        <p>
+                            Event
+                            <i class="nav-arrow bi bi-chevron-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item"> <a href="{{ route('events.create') }}" class="nav-link"> <i
+                                    class="nav-icon bi bi-arrow-right"></i>
+                                <p>add new</p>
+                            </a> </li>
+                        <li class="nav-item"> <a href="{{ route('events.index') }}" class="nav-link"> <i
+                                    class="nav-icon bi bi-arrow-right"></i>
+                                <p>list</p>
+                            </a> </li>
+                    </ul>
+                </li>
+                <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-palette"></i>
+                        <p>Link</p>
+                    </a> </li>
             </ul> <!--end::Sidebar Menu-->
         </nav>
     </div> <!--end::Sidebar Wrapper-->
