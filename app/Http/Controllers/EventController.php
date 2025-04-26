@@ -31,6 +31,7 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $event = new Event();
         $event->name = $request->name;
         $event->description = $request->description;

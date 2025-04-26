@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -11,7 +13,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::all();
+        return view('admin.categories.index', compact('categories'));
     }
 
     /**
@@ -19,15 +22,17 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.categories.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        //
+        $request->validated();
+        Category::create($request->all());
+        return redirect()->route('categories.index')->with('success', 'Category created successfully');
     }
 
     /**
@@ -60,5 +65,19 @@ class CategoryController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function ajaxStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|unique:categories,name|max:255'
+        ]);
+
+        $category = Category::create(['name' => $request->name]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Category added successfully',
+            'category' => $category
+        ]);
     }
 }

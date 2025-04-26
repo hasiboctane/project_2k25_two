@@ -34,10 +34,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
+                        <li class="nav-item"> <a href="{{ route('categories.create') }}" class="nav-link"> <i
+                                    class="nav-icon bi bi-arrow-right"></i>
                                 <p>add new</p>
                             </a> </li>
-                        <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-circle"></i>
+                        <li class="nav-item"> <a href="{{ route('categories.index') }}" class="nav-link"> <i
+                                    class="nav-icon bi bi-arrow-right"></i>
                                 <p>list</p>
                             </a> </li>
                     </ul>
