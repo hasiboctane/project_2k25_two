@@ -15,6 +15,15 @@
         <!-- Events table -->
         <div class="card">
             <div class="card-body">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
@@ -90,7 +99,7 @@
                         <div class="col-md-6">
                             <div class="input-group mb-3">
                                 <input type="file" class="form-control" id="event_banner" name="event_banner">
-                                <label class="input-group-text" for="event_banner">Upload</label>
+                                <label class="input-group-text" for="event_banner">Event Banner</label>
                             </div>
                         </div>
 

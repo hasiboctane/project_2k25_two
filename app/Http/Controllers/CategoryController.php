@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -30,8 +31,16 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
+        $originalImage = $request->file('image');
+        $imageName = 'category-'.time() . '.' . $originalImage->extension();
+
+        $path = Storage::disk('public')->putFileAs('categories',$originalImage, $imageName);
+        // dd($path);
         $request->validated();
-        Category::create($request->all());
+        Category::create([
+            'name' =>$request->name,
+            'image' => $path
+        ]);
         return redirect()->route('categories.index')->with('success', 'Category created successfully');
     }
 
@@ -62,9 +71,18 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        //
+
+        // through ajax
+        try {
+            $category->delete();
+            return response()->json(['status' => 'success', 'message' => 'Category deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Failed to delete category'], 500);
+        }
+
+
     }
     public function ajaxStore(Request $request)
     {

@@ -17,25 +17,52 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table ">
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
                         <thead>
                             <tr>
                                 <th>SL</th>
                                 <th>Title</th>
+                                <th>Image</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (session('success'))
-                                <div class="alert alert-success">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
                             @php
                                 $sl = 1;
                             @endphp
                             @forelse($categories as $category)
-                                <tr>
+                                <tr id="category-row-{{ $category->id }}">
                                     <td>{{ $sl++ }}</td>
                                     <td>{{ $category->name }}</td>
+                                    <td>
+                                        @if ($category->image)
+                                            <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->image }}"
+                                                class="img-fluid" style="width: 50px; height: 50px;">
+                                        @else
+                                            No Image
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <button type="button" onclick="deleteCategory({{ $category->id }})"
+                                            class="btn btn-danger btn-sm">
+                                            Delete
+                                        </button>
+                                        {{-- <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete"
+                                                onclick="return confirm('Are you sure?')">
+                                                Delete
+                                            </button>
+                                        </form> --}}
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -54,3 +81,39 @@
         </div>
     </div>
 @endsection
+
+@push('custom-js')
+    <script>
+        function deleteCategory(id) {
+            if (confirm('Are you sure you want to delete this category?')) {
+                $.ajax({
+                    url: "{{ route('categories.destroy', '') }}/" + id,
+                    type: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            $('#category-row-' + id).remove();
+                            // Show the success message dynamically
+                            let successMessage = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                ${response.message}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>`;
+                            $('.table-responsive').prepend(successMessage);
+                        } else {
+                            alert('Failed to delete category');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+
+                    }
+                });
+            }
+
+
+
+        }
+    </script>
+@endpush

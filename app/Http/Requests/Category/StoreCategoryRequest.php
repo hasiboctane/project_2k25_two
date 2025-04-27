@@ -22,7 +22,8 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:categories,name'],
+            'image' => ['nullable','image','mimes:jpeg,png,jpg,gif,svg','max:2048'],
         ];
     }
     public function messages()
@@ -31,6 +32,7 @@ class StoreCategoryRequest extends FormRequest
             'name.required' => 'The name field is required.',
             'name.string' => 'The name field must be a string.',
             'name.max' => 'The name field must not exceed 255 characters.',
+            'name.unique' => 'The name field must be unique.',
         ];
     }
 }

@@ -24,14 +24,18 @@
                         </ul>
                     </div>
                 @endif
-                <form action="{{ route('categories.store') }}" method="POST">
+                <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="mb-3">
                             <label for="name" class="form-label">Category Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="name">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="name"
+                                value="{{ old('name') }}">
                         </div>
-
+                        <div class="mb-3 input-group">
+                            <input type="file" name="image" id="image" class="form-control">
+                            <label class="input-group-text" for="image">Upload</label>
+                        </div>
                         <div class="mb-3 ">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
