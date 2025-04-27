@@ -42,10 +42,12 @@
                                     <td>{{ $category->name }}</td>
                                     <td>
                                         @if ($category->image)
-                                            <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->image }}"
-                                                class="img-fluid" style="width: 50px; height: 50px;">
+                                            <img src="{{ asset('storage/' . $category->image) }}"
+                                                alt="{{ $category->image }}" class="img-fluid"
+                                                style="width: 50px; height: 50px;">
                                         @else
-                                            No Image
+                                            <img src="{{ Vite::asset('resources/assets/img/no_image.jpg') }}" alt="No Image"
+                                                class="img-fluid" style="width: 50px; height: 50px;">
                                         @endif
                                     </td>
                                     <td>

@@ -31,12 +31,15 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        $originalImage = $request->file('image');
-        $imageName = 'category-'.time() . '.' . $originalImage->extension();
-
-        $path = Storage::disk('public')->putFileAs('categories',$originalImage, $imageName);
-        // dd($path);
         $request->validated();
+        $path = null;
+        if($request->hasFile('image')){
+            $originalImage = $request->file('image');
+            $imageName = 'category-'.time() . '.' . $originalImage->extension();
+
+            $path = Storage::disk('public')->putFileAs('categories',$originalImage, $imageName);
+        }
+
         Category::create([
             'name' =>$request->name,
             'image' => $path
@@ -76,6 +79,11 @@ class CategoryController extends Controller
 
         // through ajax
         try {
+            // Delete the image from storage
+            if($category->image){
+                Storage::disk('public')->delete($category->image);
+            }
+            // Delete the category from the database
             $category->delete();
             return response()->json(['status' => 'success', 'message' => 'Category deleted successfully']);
         } catch (\Exception $e) {
