@@ -6,6 +6,7 @@ use App\Http\Requests\events\StoreEventRequest;
 use App\Models\Category;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
@@ -30,13 +31,20 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
-        dd($request->all());
+        // $request->validated();
+        $bannerPath = null;
+        if($request->hasFile(('event_banner'))){
+            $orginalBanner = $request->file('event_banner');
+            $bannerName = 'event-'.time() . '.' . $orginalBanner->extension();
+            $bannerPath = $orginalBanner->storeAs('events', $bannerName, 'public');
+        }
         $event = new Event();
         $event->name = $request->name;
         $event->description = $request->description;
         $event->category_id = $request->category_id;
+        $event->event_banner = $bannerPath;
         $event->type = $request->type;
         $event->location = $request->location;
         $event->price = $request->price;
@@ -76,6 +84,20 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
-        //
+        try{
+            if($event->event_banner){
+                Storage::disk('public')->delete($event->event_banner);
+            }
+            $event->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Event deleted successfully'
+            ]);
+        }catch (\Exception $e){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to delete event'
+            ], 500);
+        }
     }
 }

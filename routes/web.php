@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -16,10 +17,11 @@ Route::prefix('em-admin')->middleware(['auth', 'verified'])->group(function () {
         return view('admin.dashboard');
     })->name('dashboard');
 
-    Route::resource('categories',CategoryController::class)->except(['show','edit']);
+    Route::resource('categories',CategoryController::class);
     // create category with ajax
     Route::post('categories/ajax-store',[CategoryController::class,'ajaxStore'])->name('categories.ajax-store');
     Route::resource('events',EventController::class);
+
 });
 
 
@@ -29,4 +31,5 @@ Route::prefix('em-admin')->middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+require __DIR__.'/role.php';
 require __DIR__.'/auth.php';

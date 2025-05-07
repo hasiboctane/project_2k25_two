@@ -51,10 +51,26 @@
                                         @endif
                                     </td>
                                     <td>
+                                        </button>
+                                        {{-- <button type="button" onclick="" class="btn btn-info btn-sm">
+                                            Show
+                                        </button> --}}
+                                        <a href="{{ route('categories.edit', $category->id) }}"
+                                            class="btn btn-warning btn-sm">Edit</a>
                                         <button type="button" onclick="deleteCategory({{ $category->id }})"
                                             class="btn btn-danger btn-sm">
                                             Delete
                                         </button>
+                                        <!-- Button trigger modal -->
+                                        <button type="button" onclick="showCategory({{ $category->id }})"
+                                            class="btn btn-info btn-sm">
+                                            Show
+                                        </button>
+                                        {{-- <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#showCategoryModal">
+                                            Show
+                                        </button> --}}
+
                                         {{-- <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
@@ -74,6 +90,8 @@
                         </tbody>
                     </table>
                 </div>
+                @include('admin.categories.modal')
+                <!-- Modal -->
 
                 <!-- Pagination -->
                 <div class="mt-4">
@@ -99,9 +117,9 @@
                             $('#category-row-' + id).remove();
                             // Show the success message dynamically
                             let successMessage = `<div class="alert alert-success alert-dismissible fade show" role="alert">
-                                ${response.message}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>`;
+                            ${response.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`;
                             $('.table-responsive').prepend(successMessage);
                         } else {
                             alert('Failed to delete category');
@@ -113,9 +131,31 @@
                     }
                 });
             }
+        }
 
+        function showCategory(id) {
+            $.ajax({
+                url: "{{ route('categories.show', '') }}/" + id,
+                type: 'GET',
+                success: function(response) {
+                    // $('#categoryTitle').text('Category Details');
+                    $('#categoryName').text(response.name);
 
+                    if (response.image) {
+                        $('#categoryImage').attr('src', `/storage/${response.image}`).show();
+                    } else {
+                        $('#categoryImage').attr('src',
+                            '{{ Vite::asset('resources/assets/img/no_image.jpg') }}').show();
+                    }
 
+                    // Show the modal
+                    $('#showCategoryModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('Failed to fetch category details.');
+                }
+            });
         }
     </script>
 @endpush

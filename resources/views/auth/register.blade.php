@@ -66,7 +66,7 @@
                 </a>
             </div> <!-- /.social-auth-links --> --}}
             <p class="mb-0"> <a href="{{ route('login') }}" class="text-center">
-                    I already have a membership
+                    I already have an account
                 </a> </p>
         </div> <!-- /.register-card-body -->
     </div>

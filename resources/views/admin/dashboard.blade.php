@@ -18,7 +18,9 @@
                     </div>
                 </div> <!--end::Row-->
             </div> <!--end::Container-->
-        </div> <!--end::App Content Header--> <!--begin::App Content-->
+        </div>
+        <!--end::App Content Header-->
+        <!--begin::App Content-->
         <div class="app-content"> <!--begin::Container-->
             <div class="container-fluid"> <!--begin::Row-->
                 <div class="row"> <!--begin::Col-->
@@ -87,7 +89,11 @@
                     </div> <!--end::Col-->
                 </div> <!--end::Row-->
             </div> <!--end::Container-->
-        </div> <!--end::App Content-->
+        </div>
+        <!--end::App Content-->
+        {{-- Role Management Start --}}
+
+        {{-- Role Management End --}}
     </main>
 @endsection
 @section('custom-js')

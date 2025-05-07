@@ -31,7 +31,7 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        $request->validated();
+        // $request->validated();
         $path = null;
         if($request->hasFile('image')){
             $originalImage = $request->file('image');
@@ -50,9 +50,9 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Category $category)
     {
-        //
+        return response()->json($category);
     }
 
     /**

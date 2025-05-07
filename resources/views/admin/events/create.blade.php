@@ -29,11 +29,12 @@
                     <div class="row">
                         <div class="mb-3">
                             <label for="name" class="form-label">Event Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="name">
+                            <input type="text" class="form-control" id="name" name="name"
+                                value="{{ old('name') }}" placeholder="name">
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control" id="description" rows="3" name="description" placeholder="description"></textarea>
+                            <textarea class="form-control" id="description" rows="3" name="description" placeholder="description">{{ old('description') }}</textarea>
                         </div>
                         <div class="col-md-3">
                             <select class="form-select" id="category" name="category_id" required>
@@ -68,38 +69,52 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="location" class="form-label">Location</label>
-                                <input type="text" class="form-control" id="location" name="location" placeholder="">
+                                <input type="text" class="form-control" id="location" name="location"
+                                    value="{{ old('location') }}">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="price" class="form-label">Price</label>
-                                <input type="number" class="form-control" id="price" name="price" placeholder="">
+                                <input type="number" class="form-control" id="price" name="price"
+                                    value="{{ old('price') }}" min="0">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="max_capacity" class="form-label">Max Capacity</label>
                                 <input type="number" class="form-control" id="max_capacity" name="max_capacity"
-                                    placeholder="">
+                                    value="{{ old('max_capacity') }}" min="1">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="start_date" class="form-label">Start Date</label>
-                                <input type="date" class="form-control" name="start_date" id="start_date">
+                                <input type="date" class="form-control" name="start_date"
+                                    value="{{ old('start_date') }}" id="start_date">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="end_date" class="form-label">End Date</label>
-                                <input type="date" class="form-control" name="end_date" id="end_date">
+                                <input type="date" class="form-control" name="end_date" value="{{ old('end_date') }}"
+                                    id="end_date">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="input-group mb-3">
                                 <input type="file" class="form-control" id="event_banner" name="event_banner">
                                 <label class="input-group-text" for="event_banner">Event Banner</label>
+                            </div>
+                            <!-- Preview Box -->
+                            <div class="mb-3">
+                                <div id="previewArea"
+                                    class="border-2 border-secondary rounded d-flex align-items-center justify-content-center"
+                                    style="width: 140px; height: 120px; background-color: #f8f9fa;">
+                                    <img id="previewImage" src="#" alt="Selected Image"
+                                        style="display: none; width: 100%; height: 100%; object-fit: cover"
+                                        class="rounded" />
+                                </div>
                             </div>
                         </div>
 
@@ -116,6 +131,7 @@
 @push('custom-js')
     <script>
         $(document).ready(function() {
+            // Type Selection
             $('#type').change(function() {
                 var selectedType = $(this).val();
                 var priceInput = $('#price');
@@ -128,7 +144,7 @@
                     priceInput.prop('readonly', false);
                 }
             });
-
+            // Category Selection / Add
             $('#addCategoryBtn').click(function() {
                 // console.log('Button clicked');
                 var categoryName = $("#new_category_name").val();
@@ -163,8 +179,18 @@
                     }
 
                 })
-            })
+            });
+            // Image preview
+            $('#event_banner').change(function(e) {
+                var reader = new FileReader();
 
+                reader.onload = function(e) {
+                    $('#previewImage').attr('src', e.target.result);
+                    $('#previewImage').show();
+                }
+
+                reader.readAsDataURL(e.target.files[0]);
+            });
 
         });
     </script>

@@ -12,7 +12,7 @@
             </a>
         </div>
 
-        <!-- ECategory table -->
+        <!-- Category table -->
         <div class="card">
             <div class="card-body">
                 @if ($errors->any())
@@ -33,11 +33,20 @@
                                 value="{{ old('name') }}">
                         </div>
                         <div class="mb-3 input-group">
-                            <input type="file" name="image" id="image" class="form-control">
-                            <label class="input-group-text" for="image">Upload</label>
+                            <input type="file" name="image" id="imageInput" class="form-control">
+                            <label class="input-group-text" for="imageInput">Category Image</label>
+                        </div>
+                        <!-- Preview Box -->
+                        <div class="mb-3">
+                            <div id="previewArea"
+                                class="border-2 border-secondary rounded d-flex align-items-center justify-content-center"
+                                style="width: 160px; height: 140px; background-color: #f8f9fa;">
+                                <img id="previewImage" src="#" alt="Selected Image"
+                                    style="display: none; width: 100%; height: 100%; object-fit: cover" class="rounded" />
+                            </div>
                         </div>
                         <div class="mb-3 ">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="mt-2 btn btn-primary">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -49,6 +58,16 @@
 @push('custom-js')
     <script>
         $(document).ready(function() {
+            $('#imageInput').change(function(e) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#previewImage').attr('src', e.target.result);
+                    $('#previewImage').show();
+                }
+
+                reader.readAsDataURL(e.target.files[0]);
+            });
 
 
         });

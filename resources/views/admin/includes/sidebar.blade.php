@@ -1,10 +1,11 @@
 <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark"> <!--begin::Sidebar Brand-->
-    <div class="sidebar-brand"> <!--begin::Brand Link--> <a href="./index.html" class="brand-link">
+    <div class="sidebar-brand">
+        <!--begin::Brand Link-->
+        <a href="{{ route('dashboard') }}" class="brand-link">
             <!--begin::Brand Image-->
             <img src="{{ Vite::asset('resources/assets/img/AdminLTEFullLogo.png') }}" alt="AdminLTE Logo"
                 class="brand-image opacity-75 shadow">
             <!--end::Brand Image-->
-
         </a>
         <!--end::Brand Link-->
     </div> <!--end::Sidebar Brand--> <!--begin::Sidebar Wrapper-->
@@ -64,6 +65,12 @@
                 <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-palette"></i>
                         <p>Link</p>
                     </a> </li>
+                <li class="nav-item">
+                    <a href="{{ route('role.management') }}" class="nav-link py-2 bg-primary"> <i
+                            class="bi bi-shield-fill-exclamation text-warning"></i>
+                        <p>Role Management</p>
+                    </a>
+                </li>
             </ul> <!--end::Sidebar Menu-->
         </nav>
     </div> <!--end::Sidebar Wrapper-->
