@@ -1,8 +1,12 @@
 <div class="row">
     <ul class="nav nav-tabs">
-        <li class="nav-item ">
-            <a class="nav-link @if (request()->routeIs('role.management')) active @endif" aria-current="page"
-                href="{{ route('role.management') }}">Role Management</a>
+        <li class="nav-item">
+            <a class="nav-link @if (request()->routeIs('roles.index')) active @endif" href="{{ route('roles.index') }}">Role
+                Management</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @if (request()->routeIs('users.index')) active @endif"
+                href="{{ route('users.index') }}">Users</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @if (request()->routeIs('permissions.index')) active @endif"

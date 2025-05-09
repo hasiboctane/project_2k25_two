@@ -12,7 +12,7 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $permissions = Permission::paginate(10);
+        $permissions = Permission::orderBy('created_at','desc')->paginate(10);
         // return response()->json($permissions);
         return view('admin.role&permission.permissions.list', compact('permissions'));
     }
@@ -68,6 +68,11 @@ class PermissionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $permission = Permission::findOrFail($id);
+        $permission->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'successfully deleted!'
+        ]);
     }
 }

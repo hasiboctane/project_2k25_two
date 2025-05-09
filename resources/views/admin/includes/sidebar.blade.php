@@ -27,24 +27,25 @@
 
                     </ul>
                 </li>
-
-                <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-box-seam-fill"></i>
-                        <p>
-                            Category
-                            <i class="nav-arrow bi bi-chevron-right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item"> <a href="{{ route('categories.create') }}" class="nav-link"> <i
-                                    class="nav-icon bi bi-arrow-right"></i>
-                                <p>add new</p>
-                            </a> </li>
-                        <li class="nav-item"> <a href="{{ route('categories.index') }}" class="nav-link"> <i
-                                    class="nav-icon bi bi-arrow-right"></i>
-                                <p>list</p>
-                            </a> </li>
-                    </ul>
-                </li>
+                @role('admin|moderator')
+                    <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-box-seam-fill"></i>
+                            <p>
+                                Category
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item"> <a href="{{ route('categories.create') }}" class="nav-link"> <i
+                                        class="nav-icon bi bi-arrow-right"></i>
+                                    <p>add new</p>
+                                </a> </li>
+                            <li class="nav-item"> <a href="{{ route('categories.index') }}" class="nav-link"> <i
+                                        class="nav-icon bi bi-arrow-right"></i>
+                                    <p>list</p>
+                                </a> </li>
+                        </ul>
+                    </li>
+                @endrole
                 <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-box-seam-fill"></i>
                         <p>
                             Event
@@ -66,7 +67,7 @@
                         <p>Link</p>
                     </a> </li>
                 <li class="nav-item">
-                    <a href="{{ route('role.management') }}" class="nav-link py-2 bg-primary"> <i
+                    <a href="{{ route('roles.index') }}" class="nav-link py-2 bg-primary"> <i
                             class="bi bi-shield-fill-exclamation text-warning"></i>
                         <p>Role Management</p>
                     </a>

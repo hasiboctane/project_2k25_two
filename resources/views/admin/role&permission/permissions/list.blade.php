@@ -23,7 +23,7 @@
                                         <input type="text" class="form-control" id="name" name="name"
                                             placeholder="name" value="{{ old('name') }}">
                                         @error('name')
-                                            <p>{{ $message }}</p>
+                                            <p class="text-danger mt-1">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="">
@@ -55,7 +55,7 @@
                                         $sl = 1;
                                     @endphp
                                     @forelse($permissions as $permission)
-                                        <tr id="category-row-{{ $permission->id }}">
+                                        <tr id="permission-row-{{ $permission->id }}">
                                             <td>{{ $sl++ }}</td>
                                             <td>{{ $permission->name }}</td>
                                             <td>
@@ -63,8 +63,8 @@
                                                 {{-- <button type="button" onclick="" class="btn btn-info btn-sm">
                                                     Show
                                                 </button> --}}
-                                                <a href="" class="btn btn-warning btn-sm inline-block">Edit</a>
-                                                <button type="button" onclick=""
+                                                {{-- <a href="" class="btn btn-warning btn-sm inline-block">Edit</a> --}}
+                                                <button type="button" onclick="deleteItem({{ $permission->id }})"
                                                     class="inline-block btn btn-danger btn-sm">
                                                     Delete
                                                 </button>
@@ -72,7 +72,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="text-center">No permissions found</td>
+                                            <td colspan="6" class="text-center text-warning">No permissions found</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -89,5 +89,31 @@
 @endsection
 
 @push('custom-js')
-    <script></script>
+    <script>
+        function deleteItem(id) {
+            // console.log(id);
+            $.ajax({
+                url: "{{ route('permissions.destroy', '') }}/" + id,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        $('#permission-row-' + id).remove();
+                        let successMessage = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            ${response.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`;
+                        $('.table-responsive').prepend(successMessage);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+
+                }
+            })
+
+        }
+    </script>
 @endpush

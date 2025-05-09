@@ -17,7 +17,7 @@ Route::prefix('em-admin')->middleware(['auth', 'verified'])->group(function () {
         return view('admin.dashboard');
     })->name('dashboard');
 
-    Route::resource('categories',CategoryController::class);
+    Route::resource('categories',CategoryController::class)->middleware('role:moderator|admin');
     // create category with ajax
     Route::post('categories/ajax-store',[CategoryController::class,'ajaxStore'])->name('categories.ajax-store');
     Route::resource('events',EventController::class);
