@@ -6,10 +6,20 @@ use App\Http\Requests\events\StoreEventRequest;
 use App\Models\Category;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Storage;
 
-class EventController extends Controller
+class EventController extends Controller implements HasMiddleware
 {
+        public static function middleware(){
+        return [
+            new Middleware('permission:view events', only: ['index', 'show']),
+            new Middleware('permission:create events', only: ['create', 'store']),
+            new Middleware('permission:edit events', only: ['edit', 'update']),
+            new Middleware('permission:delete events', only: ['destroy']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */

@@ -7,9 +7,11 @@
         <!-- Page header -->
         <div class="page-header d-flex justify-content-between align-items-center">
             <h1 class="page-title">Events List</h1>
-            <a href="{{ route('events.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add New Event
-            </a>
+            @can('create events')
+                <a href="{{ route('events.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add New Event
+                </a>
+            @endcan
         </div>
 
         <!-- Events table -->
@@ -62,11 +64,14 @@
                                             Show
                                         </button>
                                         <a href="{{ route('events.edit', $event->id) }}"
-                                            class="btn btn-warning btn-sm">Edit</a>
-                                        <button type="button" onclick="deleteEvent({{ $event->id }})"
-                                            class="btn btn-danger btn-sm">
-                                            Delete
-                                        </button>
+                                            class="btn btn-warning btn-sm">Edit
+                                        </a>
+                                        @can('delete events')
+                                            <button type="button" onclick="deleteEvent({{ $event->id }})"
+                                                class="btn btn-danger btn-sm">
+                                                Delete
+                                            </button>
+                                        @endcan
                                     </td>
                                 </tr>
                             @empty

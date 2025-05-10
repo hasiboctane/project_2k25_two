@@ -7,9 +7,11 @@
         <!-- Page header -->
         <div class="page-header d-flex justify-content-between align-items-center">
             <h1 class="page-title">Categories List</h1>
-            <a href="{{ route('categories.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add New Category
-            </a>
+            @can('create categories')
+                <a href="{{ route('categories.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add New Category
+                </a>
+            @endcan
         </div>
 
         <!-- Categories table -->
@@ -51,26 +53,20 @@
                                         @endif
                                     </td>
                                     <td>
-                                        </button>
-                                        {{-- <button type="button" onclick="" class="btn btn-info btn-sm">
-                                            Show
-                                        </button> --}}
-                                        <a href="{{ route('categories.edit', $category->id) }}"
-                                            class="btn btn-warning btn-sm">Edit</a>
-                                        <button type="button" onclick="deleteCategory({{ $category->id }})"
-                                            class="btn btn-danger btn-sm">
-                                            Delete
-                                        </button>
                                         <!-- Button trigger modal -->
                                         <button type="button" onclick="showCategory({{ $category->id }})"
                                             class="btn btn-info btn-sm">
                                             Show
                                         </button>
-                                        {{-- <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#showCategoryModal">
-                                            Show
-                                        </button> --}}
-
+                                        <a href="{{ route('categories.edit', $category->id) }}"
+                                            class="btn btn-warning btn-sm">Edit
+                                        </a>
+                                        @can('delete categories')
+                                            <button type="button" onclick="deleteCategory({{ $category->id }})"
+                                                class="btn btn-danger btn-sm">
+                                                Delete
+                                            </button>
+                                        @endcan
                                         {{-- <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
@@ -90,8 +86,8 @@
                         </tbody>
                     </table>
                 </div>
-                @include('admin.categories.modal')
                 <!-- Modal -->
+                @include('admin.categories.modal')
 
                 <!-- Pagination -->
                 <div class="mt-4">

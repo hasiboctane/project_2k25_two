@@ -4,13 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Models\Role;
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
     /**
      * Display a listing of the resource.
      */
+    public static function middleware()
+    {
+        return[
+            // 'role_or_permission:manager|edit articles',
+            new Middleware('permission:view users', only: ['index']),
+            new Middleware('permission:edit users', only: ['edit','update']),
+            new Middleware('permission:delete users', only: ['destroy']),
+        ];
+    }
     public function index()
     {
         $users = User::orderBy('created_at', 'asc')->paginate(5);

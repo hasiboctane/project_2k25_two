@@ -3,17 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class RoleController extends Controller
+class RoleController extends Controller implements HasMiddleware
 {
+        public static function middleware()
+    {
+        return[
+            new Middleware('permission:view roles', only: ['index']),
+            new Middleware('permission:create roles', only: ['create','store']),
+            new Middleware('permission:edit roles', only: ['edit','update']),
+            new Middleware('permission:delete roles', only: ['destroy']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $roles = Role::paginate(5);
+        $roles = Role::orderBy('created_at','desc')->paginate(5);
         $permissions= Permission::orderBy('created_at','asc')->get();
         return view('admin.role&permission.roles.list',compact('roles','permissions'));
     }
@@ -23,7 +34,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('admin.role&permission.roles.create');
+        // return view('admin.role&permission.roles.create');
     }
 
     /**

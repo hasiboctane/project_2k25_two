@@ -26,11 +26,16 @@
                                             <p class="mt-1 text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
+                                    <div class="mb-2">
+                                        <button type="button" class="btn btn-sm btn-secondary mb-2" id="checkAllBtn">Check
+                                            All</button>
+                                    </div>
                                     <div class="mb-2 d-flex justify-content-center align-items-center flex-wrap gap-4">
                                         @foreach ($permissions as $permission)
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="{{ $permission->id }}"
-                                                    name="permissions[]" value="{{ $permission->name }}">
+                                                <input type="checkbox" class="form-check-input permission-checkbox"
+                                                    id="{{ $permission->id }}" name="permissions[]"
+                                                    value="{{ $permission->name }}">
                                                 <label class="form-check-label"
                                                     for="{{ $permission->id }}">{{ $permission->name }}</label>
                                             </div>
@@ -39,6 +44,7 @@
                                             <p>{{ $message }}</p>
                                         @enderror
                                     </div>
+
                                     <div class="mb-1">
                                         <button type="submit" class=" btn btn-primary">create role</button>
                                     </div>
@@ -138,5 +144,10 @@
             }
 
         }
+        $('#checkAllBtn').on('click', function() {
+            let allChecked = $('.permission-checkbox:checked').length === $('.permission-checkbox').length;
+            $('.permission-checkbox').prop('checked', !allChecked);
+            $(this).text(allChecked ? 'Check All' : 'Uncheck All');
+        });
     </script>
 @endpush

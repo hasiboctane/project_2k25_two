@@ -29,10 +29,15 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+                                <div class="mb-2">
+                                    <button type="button" class="btn btn-sm btn-secondary mb-2" id="checkAllBtn">Check
+                                        All</button>
+                                </div>
                                 <div class="mb-2 d-flex justify-content-start align-items-center flex-wrap gap-4">
                                     @foreach ($permissions as $permission)
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="{{ $permission->id }}"
+                                            <input type="checkbox" class="form-check-input permission-checkbox"
+                                                id="{{ $permission->id }}"
                                                 {{ $hasPermissions->contains($permission->name) ? 'checked' : '' }}
                                                 name="permissions[]" value="{{ $permission->name }}">
                                             <label class="form-check-label"
@@ -56,5 +61,11 @@
 @endsection
 
 @push('custom-js')
-    <script></script>
+    <script>
+        $('#checkAllBtn').on('click', function() {
+            let allChecked = $('.permission-checkbox:checked').length === $('.permission-checkbox').length;
+            $('.permission-checkbox').prop('checked', !allChecked);
+            $(this).text(allChecked ? 'Check All' : 'Uncheck All');
+        });
+    </script>
 @endpush

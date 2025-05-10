@@ -73,8 +73,8 @@
                         <img src="{{ Vite::asset('resources/assets/img/user2-160x160.jpg') }}"
                             class="rounded-circle shadow" alt="User Image">
                         <p>
-                            {{ auth()->user()->name }}
-                            <small>Member since Nov. 2023</small>
+                            {{ auth()->user()->name }}({{ auth()->user()->roles->pluck('name')->implode(', ') }})
+                            <small>Member since {{ auth()->user()->created_at }}</small>
                         </p>
                     </li> <!--end::User Image--> <!--begin::Menu Body-->
                     <!--begin::Menu Footer-->

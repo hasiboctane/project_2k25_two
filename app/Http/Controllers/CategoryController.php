@@ -5,10 +5,20 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Category\StoreCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Storage;
 
-class CategoryController extends Controller
+class CategoryController extends Controller implements HasMiddleware
 {
+    public static function middleware(){
+        return [
+            new Middleware('permission:view categories', only: ['index', 'show']),
+            new Middleware('permission:create categories', only: ['create', 'store']),
+            new Middleware('permission:edit categories', only: ['edit', 'update']),
+            new Middleware('permission:delete categories', only: ['destroy']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */
