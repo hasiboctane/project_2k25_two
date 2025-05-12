@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\StoreCategoryRequest;
+use App\Http\Requests\category\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -41,7 +42,6 @@ class CategoryController extends Controller implements HasMiddleware
      */
     public function store(StoreCategoryRequest $request)
     {
-        // $request->validated();
         $path = null;
         if($request->hasFile('image')){
             $originalImage = $request->file('image');
@@ -68,17 +68,31 @@ class CategoryController extends Controller implements HasMiddleware
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Category $category)
     {
-        //
+        return view('admin.categories.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        // dd($request->all());
+        $path = $category->image;
+        if($request->hasFile('image')){
+            if($category->image){
+                Storage::disk('public')->delete($category->image);
+            }
+            $originalImage = $request->file('image');
+            $imageName = 'category-'.time().'.'.$originalImage->extension();
+            $path = Storage::disk('public')->putFileAs('categories', $originalImage, $imageName);
+        }
+        $category->update([
+            'name' => $request->name,
+            'image' => $path
+        ]);
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully');
     }
 
     /**

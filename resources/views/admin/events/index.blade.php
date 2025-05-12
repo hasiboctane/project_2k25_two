@@ -42,7 +42,7 @@
                                 <tr id="event-row-{{ $event->id }}">
                                     <td>{{ $event->id }}</td>
                                     <td>{{ $event->name }}</td>
-                                    <td>{{ $event->description }}</td>
+                                    <td>{{ Str::limit($event->description, 40) }}</td>
                                     <td>
                                         @if ($event->event_banner)
                                             <img src="{{ asset('storage/' . $event->event_banner) }}"
@@ -60,11 +60,14 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <button type="button" onclick="" class="btn btn-info btn-sm">
+                                        <button type="button" onclick="showEvent({{ $event->id }})"
+                                            class="btn btn-info btn-sm">
                                             Show
                                         </button>
-                                        <a href="{{ route('events.edit', $event->id) }}"
-                                            class="btn btn-warning btn-sm">Edit
+                                        {{-- <a href="{{ route('events.show', $event) }}" class="btn btn-info btn-sm">
+                                            Show
+                                        </a> --}}
+                                        <a href="{{ route('events.edit', $event) }}" class="btn btn-warning btn-sm">Edit
                                         </a>
                                         @can('delete events')
                                             <button type="button" onclick="deleteEvent({{ $event->id }})"
@@ -82,14 +85,16 @@
                         </tbody>
                     </table>
                 </div>
-
+                <!-- Modal -->
+                @include('admin.events.modal')
                 <!-- Pagination -->
                 <div class="mt-4">
-                    {{-- {{ $events->links() }} --}}
+                    {{ $events->links() }}
                 </div>
             </div>
         </div>
     </div>
+
 @endsection
 @push('custom-js')
     <script>
@@ -118,6 +123,50 @@
                     }
                 });
             }
+
+        }
+        // Helper to format datetime string to readable format
+        function formatDateTime(dt) {
+            if (!dt) return '';
+            const d = new Date(dt);
+            // Format: YYYY-MM-DD HH:mm
+            return d.getFullYear() + '-' +
+                String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                String(d.getDate()).padStart(2, '0') + ' ' +
+                String(d.getHours()).padStart(2, '0') + ':' +
+                String(d.getMinutes()).padStart(2, '0');
+        }
+        // Show Event
+        function showEvent(id) {
+            $.ajax({
+                url: "{{ route('events.show', '') }}/" + id,
+                method: 'GET',
+                success: function(response) {
+                    $('#eventName').text(response.name);
+                    $('#eventDescription').text(response.description);
+                    $('#eventPrice').text(response.price);
+                    $('#eventLocation').text(response.location);
+                    $('#eventMaxCapacity').text(response.max_capacity);
+                    // Show time period
+                    let timePeriod = formatDateTime(response.start_time) + ' - ' + formatDateTime(response
+                        .end_time);
+                    $('#eventTime').text(timePeriod);
+
+                    if (response.event_banner) {
+                        $('#eventBanner').attr('src', `/storage/${response.event_banner}`);
+                    } else {
+                        $('#eventBanner').attr('src',
+                            `{{ Vite::asset('resources/assets/img/no_image.jpg') }}`);
+                    }
+
+                    // Show the modal
+                    $('#showEventModal').modal('show');
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('Failed to fetch event details.');
+                }
+            });
 
         }
     </script>

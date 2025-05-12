@@ -132,7 +132,7 @@
         function showCategory(id) {
             $.ajax({
                 url: "{{ route('categories.show', '') }}/" + id,
-                type: 'GET',
+                method: 'GET',
                 success: function(response) {
                     // $('#categoryTitle').text('Category Details');
                     $('#categoryName').text(response.name);

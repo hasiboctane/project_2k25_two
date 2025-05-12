@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\events\StoreEventRequest;
+use App\Http\Requests\events\UpdateEventRequest;
 use App\Models\Category;
 use App\Models\Event;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class EventController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $events = Event::all();
+        $events = Event::orderBy('created_at','desc')->paginate(5);
         return view('admin.events.index', compact('events'));
     }
 
@@ -43,12 +44,11 @@ class EventController extends Controller implements HasMiddleware
      */
     public function store(StoreEventRequest $request)
     {
-        // $request->validated();
         $bannerPath = null;
         if($request->hasFile(('event_banner'))){
-            $orginalBanner = $request->file('event_banner');
-            $bannerName = 'event-'.time() . '.' . $orginalBanner->extension();
-            $bannerPath = $orginalBanner->storeAs('events', $bannerName, 'public');
+            $originalBanner = $request->file('event_banner');
+            $bannerName = 'event-'.time() . '.' . $originalBanner->extension();
+            $bannerPath = $originalBanner->storeAs('events', $bannerName, 'public');
         }
         $event = new Event();
         $event->name = $request->name;
@@ -59,8 +59,8 @@ class EventController extends Controller implements HasMiddleware
         $event->location = $request->location;
         $event->price = $request->price;
         $event->max_capacity = $request->max_capacity;
-        $event->start_time = $request->start_date;
-        $event->end_time = $request->end_date;
+        $event->start_time = $request->start_time;
+        $event->end_time = $request->end_time;
         $event->save();
         return redirect()->route('events.index')->with('success', 'Event created successfully.');
     }
@@ -70,7 +70,7 @@ class EventController extends Controller implements HasMiddleware
      */
     public function show(Event $event)
     {
-        //
+        return response()->json($event);
     }
 
     /**
@@ -78,15 +78,38 @@ class EventController extends Controller implements HasMiddleware
      */
     public function edit(Event $event)
     {
-        //
+        $categories = Category::orderBy('name','asc')->get();
+        return view('admin.events.edit',compact('event','categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Event $event)
+    public function update(UpdateEventRequest $request, Event $event)
     {
-        //
+        // dd($event);
+        $path = $event->event_banner;
+        if($request->hasFile('event_banner')){
+            if($event->event_banner){
+                Storage::disk('public')->delete($event->event_banner);
+            }
+            $originalBanner = $request->file('event_banner');
+            $bannerName = 'event-'.time() . '.' . $originalBanner->extension();
+            $path = Storage::disk('public')->putFileAs('events',$originalBanner,$bannerName);
+        }
+        $event->name = $request->name;
+        $event->description = $request->description;
+        $event->category_id = $request->category_id;
+        $event->type = $request->type;
+        $event->location = $request->location;
+        $event->price = $request->price;
+        $event->max_capacity = $request->max_capacity;
+        $event->start_time = $request->start_time;
+        $event->end_time = $request->end_time;
+        $event->event_banner = $path;
+        $event->save();
+        return redirect()->route('events.index')->with('success', 'Event updated successfully');
+
     }
 
     /**
